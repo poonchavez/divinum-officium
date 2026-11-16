@@ -92,7 +92,7 @@ $viewport_tag
     table { max-width: 100%; }
     td, th { overflow-wrap: anywhere; }
     form { max-width: 100%; }
-    @media (max-width: 640px) {
+    \@media (max-width: 640px) {
       body { padding: .65rem; font-size: 1rem; }
       h1 { font-size: 1.5rem; }
       table.office-content { width: 100% !important; table-layout: fixed; }
