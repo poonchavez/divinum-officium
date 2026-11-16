@@ -633,11 +633,10 @@ sub occurrence {
         && exists($scrip{Lectio1})
         && $scrip{Lectio1} !~ /evangelii/i
         && ( $saint{Rank} !~ /\;\;ex /
-          || ($version =~ /trident/i && $saint{Rank} !~ /\;\;(vide|ex) /i)
           || $saint{Rule} =~ /Lectio1 temp/i)
       ) {
 
-        if ($ittable && $ittable !~ /\~[A]$/) {
+        if ($ittable && $ittable !~ /\~[AH]$/) {
 
           # If we have transferred scripture which is not coming "after" the actual day's
           # we put the source of the transferred Letio1 into the headline
@@ -709,13 +708,7 @@ sub occurrence {
       $laudesonly = ($missa) ? '' : ($climit1960 == 2) ? ' ad Laudes tantum' : '';
     }
 
-    if ( ($winner =~ /Epi1\-0a/ || ($winner =~ /Epi1\-0/ && $version =~ /altovadensis/i))
-      && ($hora =~ /laudes/i || ($vespera == 3 && $day != 12)))
-    {
-      unshift(@commemoentries, 'Sancti/01-06.txt');
-      $commemoratio = 'Sancti/01-06.txt';
-      $comrank = 5.6;
-    } elsif ($srank[2]
+    if ( $srank[2]
       && $climit1960
       && $tempora{Rule} !~ /omit.*? commemoratio/i
       && $tempora{Rule} !~ /No commemoratio/i)
@@ -803,6 +796,14 @@ sub occurrence {
       $comrank = 0;
     }
 
+    if ( ($winner =~ /Epi1\-0a/ || ($winner =~ /Epi1\-0/ && $version =~ /altovadensis/i))
+      && ($hora =~ /laudes/i || ($vespera == 3 && $day != 12)))
+    {
+      unshift(@commemoentries, 'Sancti/01-06.txt');
+      $commemoratio = 'Sancti/01-06.txt';
+      $comrank = 5.6;
+    }
+
     if (!$commemoratio && $sname) {    # if only a Vigil to be commemorated
       $sname =~ s/v\././;
       my %s = %{setupstring('Latin', $sname)};
@@ -823,7 +824,7 @@ sub occurrence {
         %tscrip = %{officestring('Latin', $tsfile)};
         $tsrank = $tscrip{Rank} || $tscrip{Scriptura};
         $tsrank =~ s/\s*;;.*|\s*$//s;
-        $officename[2] = "Scriptura ut in: $tsrank";
+        $officename[2] = @tsfile[-1] ne 'H' ? "Scriptura ut in: $tsrank" : "Historia ut in: $tsrank";
       }
     }
   }
@@ -2075,8 +2076,14 @@ sub setChantTone {
     #   II. cl.     => festivus
     #   III. cl.    => festivus minor
     #   IV. cl.     => ferialis
-    my @newtable =
-      ('none', 'ferialis', 'festivus minor', 'festivus minor', 'festivus minor', 'festivus', 'solemnis', 'solemnis');
+    my @newtable = (
+      'none', 'ferialis',
+      'festivus minor',
+      'festivus minor',
+      'festivus minor',
+      $version =~ /Barroux/ ? 'festivus major' : 'festivus',
+      'solemnis', 'solemnis',
+    );
 
     $chantTone = ($version !~ /196/) ? $tradtable[$rank] : $newtable[$rank];
 
@@ -2331,7 +2338,7 @@ sub gettempora {
 
   if ( $caller eq 'Doxology'
     || $caller eq 'Prima responsory'
-    || ($version =~ /monastic|196/i && $caller ne 'Psalmi minor' && $caller ne 'Nunc dimittis'))
+    || ($version =~ /monastic|196|1955/i && $caller ne 'Psalmi minor' && $caller ne 'Nunc dimittis'))
   {
     if ($dayname[0] =~ /^Nat/) {
       $tname = ($day >= 6 && $day < 13) ? 'Epi' : 'Nat';
