@@ -1,6 +1,9 @@
 html {
   background-color: white;
+  box-sizing: border-box;
 }
+
+*, *::before, *::after { box-sizing: inherit; }
 
 body {
   margin: 0;
@@ -8,9 +11,7 @@ body {
   color: black;
   text-align: justify;
   padding-top: 25px;
-  padding-right: 100px;
-  padding-left: 100px;
-  padding-top: 0px;
+  padding: 0 clamp(16px, 5vw, 100px);
   font-size: 1.2em;
   text-justify: auto;
 }
@@ -41,4 +42,17 @@ footer {
   flex-direction: row;
   justify-content: space-evenly;
   padding: 10px;
+}
+
+img, video, iframe { max-width: 100%; }
+input, select, textarea, button { max-width: 100%; }
+
+@media (max-width: 640px) {
+  body { padding: 0 12px; font-size: 1rem; }
+  div.container_main, .title_top { flex-direction: column; }
+  .home_menu { flex-wrap: wrap; gap: .5rem; font-size: 1.25rem; }
+  .title_part { padding: 12px; font-size: 1.1rem; }
+  span.do_title { font-size: clamp(2.5rem, 12vw, 4rem); }
+  .col_right { border-left: 0; border-top: 1px solid; }
+  footer { flex-wrap: wrap; gap: .5rem; }
 }

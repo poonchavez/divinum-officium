@@ -34,8 +34,7 @@ PrintTag
 
   $onload && ($onload = " onload=\"$onload\";");
 
-  my $is_mobile = ($officium eq 'Pofficium.pl');
-  my $viewport_tag = $is_mobile ? '  <META NAME="viewport" CONTENT="width=device-width, initial-scale=0.75">' : '';
+  my $viewport_tag = '  <META NAME="viewport" CONTENT="width=device-width, initial-scale=1">';
   my $gf = our $glossfont;
   my $gloss_color = ($gf =~ /(\#[0-9a-fA-F]+)\s*$/ || $gf =~ /([a-zA-Z]+)\s*$/) ? $1 : '';
   $gloss_color = '' if $gloss_color eq 'italic' || $gloss_color eq 'bold';
@@ -81,6 +80,26 @@ $viewport_tag
     a:visited { color: $visitedlink; }
     body {
       background: $dialogbackground;
+      margin: 0;
+      padding: 1rem;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    img, canvas, svg { max-width: 100%; height: auto; }
+    input, select, textarea, button { max-width: 100%; font: inherit; }
+    input[type='submit'], input[type='button'], button { min-height: 2.75rem; }
+    table { max-width: 100%; }
+    td, th { overflow-wrap: anywhere; }
+    form { max-width: 100%; }
+    @media (max-width: 640px) {
+      body { padding: .65rem; font-size: 1rem; }
+      h1 { font-size: 1.5rem; }
+      table.office-content { width: 100% !important; table-layout: fixed; }
+      table.office-content td { padding: .45rem; }
+      table.office-content img { max-width: 100%; }
+      input[type='text'], select, textarea { max-width: 100%; }
+      textarea { width: 100%; }
     }
     .contrastbg { background: white; }
     .nigra { color: black; }
@@ -766,7 +785,7 @@ sub table_start {
     ($textwidth && $textwidth =~ /^[0-9]+$/ && 0 < $textwidth && $textwidth <= 100)
     ? "$textwidth\%"
     : '80%';
-  print "<TABLE BORDER='$border' ALIGN='CENTER' CELLPADDING='8' WIDTH='$width' $background>";
+  print "<TABLE CLASS='office-content' BORDER='$border' ALIGN='CENTER' CELLPADDING='8' WIDTH='$width' $background>";
 }
 
 #antepost('$title')
